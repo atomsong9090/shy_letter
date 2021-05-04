@@ -29,7 +29,7 @@ const Main = styled.div`
   align-items: center;
   width: 100%;
   height: 8rem;
-  border-bottom: 0.13rem solid #b8b2b2;
+  // border-bottom: 0.13rem solid #b8b2b2;
 `;
 
 const Logo = styled.img`
