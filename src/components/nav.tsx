@@ -1,23 +1,58 @@
 import React, { ReactElement } from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
+import { useHistory } from "react-router-dom";
+import globe from "../assets/globe.svg";
 
 export default function NavBar(): ReactElement {
+  const history = useHistory();
+  const languageSet = localStorage.getItem("language");
+  if (!languageSet) {
+    localStorage.setItem("language", "korean");
+    window.location.reload();
+  }
+
+  function openModal() {
+    const modal: any = document.querySelector(".modal");
+    if (modal.style.display === "none") {
+      modal.style.display = "flex";
+    } else {
+      modal.style.display = "none";
+    }
+  }
+
+  function changeLanguage(language: string) {
+    const currentLanguage = localStorage.getItem("language");
+    if (language === "korean" && currentLanguage !== "korean") {
+      localStorage.setItem("language", "korean");
+      window.location.reload();
+    } else if (language === "english" && currentLanguage !== "english") {
+      localStorage.setItem("language", "english");
+      window.location.reload();
+    }
+  }
+
   return (
     <Main>
-      <Logo src={logo} />
+      <Logo src={logo} onClick={() => history.push("/")} />
       <MenuBox>
         <MenuWrapper>
-          <MenuItem>편지 쓰기</MenuItem>
+          <MenuItem onClick={() => history.push("/write")}>{languageSet === "korean" ? "편지쓰기" : "Write"}</MenuItem>
         </MenuWrapper>
         <MenuWrapper>
-          <MenuItem>편지 읽기</MenuItem>
+          <MenuItem>{languageSet === "korean" ? "편지읽기" : "Read"}</MenuItem>
         </MenuWrapper>
         <MenuWrapper>
-          <MenuItem>받은 편지</MenuItem>
+          <MenuItem>{languageSet === "korean" ? "받은편지" : "Inbox"}</MenuItem>
         </MenuWrapper>
       </MenuBox>
-      <LanBox>dd</LanBox>
+      <LanBox onClick={openModal}>
+        <GlobeImg src={globe} /> 한국어
+        <LanguageModal className="modal" style={{ display: "none" }}>
+          <ModalOption onClick={() => changeLanguage("korean")}>한국어</ModalOption>
+          <ModalOption onClick={() => changeLanguage("english")}>Enlglish</ModalOption>
+        </LanguageModal>
+      </LanBox>
     </Main>
   );
 }
@@ -57,7 +92,29 @@ const MenuItem = styled.div`
   }
 `;
 const LanBox = styled.div`
-  // background-color: red;
   width: 10%;
   height: 60%;
+  display: flex;
+  align-items: center;
+`;
+
+const GlobeImg = styled.img`
+  width: 2rem;
+`;
+
+const LanguageModal = styled.div`
+  position: absolute;
+  background-color: red;
+  flex-direction: column;
+  width: 8rem;
+  height: 5rem;
+  margin-top: 7.5rem;
+`;
+
+const ModalOption = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid yellow;
+  height: 50%;
 `;
