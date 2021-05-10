@@ -6,24 +6,56 @@ import contents from "../common/ask";
 import btnIcon from "../assets/btnIcon.svg";
 
 export default function Write(): ReactElement {
-  const [letterState, setLetterState] = useState("#e08392");
+  const [letterState, setLetterState] = useState("lover");
+  const currentLanguage = localStorage.getItem("language");
   function stateHandler() {
     const state: any = document.querySelector(".state");
     setLetterState(state.options[state.selectedIndex].value);
   }
-  console.log(contents.korean);
+
   return (
     <Main>
       <NavBar />
       <Container theme={letterState}>
         <SelectWraper>
           <SelectState className="state" onChange={stateHandler}>
-            <option value="pink">To 연인</option>
-            <option value="blue">To 부모님</option>
-            <option value="yellow">To 자녀</option>
-            <option value="red">To 친구</option>
+            <option value="lover">To 연인</option>
+            <option value="parent">To 부모님</option>
+            <option value="child">To 자녀</option>
+            <option value="friend">To 친구</option>
           </SelectState>
         </SelectWraper>
+        {currentLanguage === "korean"
+          ? letterState === "lover"
+            ? contents.korean.lover.map((el: any) => {
+                return (
+                  <ContentChapter>
+                    <ContentTitle>Title : {el.title}</ContentTitle>
+                    {el.question
+                      ? el.question.map((question: any) => {
+                          return (
+                            <ContentQuestion>
+                              {question}
+                              <QuestionInput />
+                            </ContentQuestion>
+                          );
+                        })
+                      : null}
+                    {el.option
+                      ? el.option.map((option: any) => {
+                          return (
+                            <ContentOption>
+                              <Option1>{option[0]}</Option1>
+                              <Option2>{option[1]}</Option2>
+                            </ContentOption>
+                          );
+                        })
+                      : null}
+                  </ContentChapter>
+                );
+              })
+            : ""
+          : null}
       </Container>
     </Main>
   );
@@ -35,7 +67,7 @@ const Container = styled.div`
   width: 50rem;
   margin: auto;
   margin-top: 3rem;
-  height: 40rem;
+  min-height: 40rem;
 `;
 const SelectState = styled.select`
   width: 10rem;
@@ -53,3 +85,45 @@ const SelectState = styled.select`
   }
 `;
 const SelectWraper = styled.div``;
+
+const ContentChapter = styled.div`
+  background-color: #93da9f;
+  display: flex;
+  flex-direction: column;
+  min-height: 15rem;
+  padding: 3rem;
+  margin-top: 1rem;
+`;
+const ContentTitle = styled.div`
+  font-size: 1.5rem;
+`;
+const ContentQuestion = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+`;
+const QuestionInput = styled.input`
+  height: 10rem;
+`;
+
+const ContentOption = styled.div`
+  display: flex;
+`;
+const Option1 = styled.div`
+  background-color: red;
+  width: 8rem;
+  height: 2rem;
+  border: 1px solid black;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+`;
+const Option2 = styled.div`
+  background-color: blue;
+  width: 8rem;
+  height: 2rem;
+  border: 1px solid black;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+`;
