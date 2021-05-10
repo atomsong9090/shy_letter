@@ -9,8 +9,10 @@ import child from "../assets/child.jpg";
 import friend from "../assets/friend.jpg";
 
 export default function Write(): ReactElement {
+  const mention = require("../common/bannerMention").default;
   const [letterState, setLetterState] = useState("lover");
   const currentLanguage = localStorage.getItem("language");
+
   function stateHandler() {
     const state: any = document.querySelector(".state");
     setLetterState(state.options[state.selectedIndex].value);
@@ -51,6 +53,28 @@ export default function Write(): ReactElement {
                 </>
               )}
             </SelectState>
+
+            {currentLanguage === "korean" ? (
+              <BannerMention>
+                {letterState === "lover"
+                  ? mention.korean.lover
+                  : letterState === "parent"
+                  ? mention.korean.parent
+                  : letterState === "child"
+                  ? mention.korean.child
+                  : mention.korean.friend}
+              </BannerMention>
+            ) : (
+              <BannerMention>
+                {letterState === "lover"
+                  ? mention.english.lover
+                  : letterState === "parent"
+                  ? mention.english.parent
+                  : letterState === "child"
+                  ? mention.english.child
+                  : mention.english.friend}
+              </BannerMention>
+            )}
           </SelectWraper>
         </ContainerDescription>
         {currentLanguage === "korean" && letterState === "lover" ? <LetterToLover /> : null}
@@ -199,4 +223,11 @@ const Option2 = styled.div`
   font-size: 1.5rem;
   display: flex;
   justify-content: center;
+`;
+
+const BannerMention = styled.h1`
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  font-family: "Nanum Brush Script", cursive;
 `;
