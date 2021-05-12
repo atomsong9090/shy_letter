@@ -12,11 +12,24 @@ export default function Write(): ReactElement {
   const mention = require("../common/bannerMention").default;
   const [letterState, setLetterState] = useState("lover");
   const currentLanguage = localStorage.getItem("language");
+  const [message, setMessage]: any = useState({});
 
   function stateHandler() {
     const state: any = document.querySelector(".state");
     setLetterState(state.options[state.selectedIndex].value);
   }
+  const getValue = (id: any) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = { ...message, [id]: e.target.value };
+    setMessage(value);
+    console.log(message);
+  };
+  const getOption = (option: string, key: number) => {
+    if (message[key] !== option) {
+      const value = { ...message, [key]: option };
+      setMessage(value);
+      console.log(message);
+    }
+  };
 
   return (
     <Main>
@@ -77,14 +90,19 @@ export default function Write(): ReactElement {
             )}
           </SelectWraper>
         </ContainerDescription>
-        {currentLanguage === "korean" && letterState === "lover" ? <LetterToLover /> : null}
-        {currentLanguage === "korean" && letterState === "parent" ? <LetterToParent /> : null}
+        {currentLanguage === "korean" && letterState === "lover" ? (
+          <LetterToLover getValue={getValue} getOption={getOption} />
+        ) : null}
+        {currentLanguage === "korean" && letterState === "parent" ? (
+          <LetterToParent getValue={getValue} getOption={getOption} />
+        ) : null}
       </Container>
     </Main>
   );
 }
 
-function LetterToLover(): any {
+function LetterToLover(props: any): any {
+  const { getValue, getOption } = props;
   return (
     <>
       {contents.korean.lover.map((el: any) => {
@@ -94,9 +112,9 @@ function LetterToLover(): any {
             {el.question
               ? el.question.map((question: any) => {
                   return (
-                    <ContentQuestion key={question}>
-                      {question}
-                      <QuestionInput />
+                    <ContentQuestion key={question[1]}>
+                      {question[0]}
+                      <QuestionInput onChange={getValue(question[1])} />
                     </ContentQuestion>
                   );
                 })
@@ -105,8 +123,8 @@ function LetterToLover(): any {
               ? el.option.map((option: any) => {
                   return (
                     <ContentOption key={option[0]}>
-                      <Option1>{option[0]}</Option1>
-                      <Option2>{option[1]}</Option2>
+                      <Option1 onClick={() => getOption(option[0], option[2])}>{option[0]}</Option1>
+                      <Option2 onClick={() => getOption(option[1], option[2])}>{option[1]}</Option2>
                     </ContentOption>
                   );
                 })
@@ -117,7 +135,9 @@ function LetterToLover(): any {
     </>
   );
 }
-function LetterToParent(): any {
+function LetterToParent(props: any): any {
+  const { getValue, getOption } = props;
+
   return (
     <>
       {contents.korean.parent.map((el: any) => {
@@ -127,9 +147,9 @@ function LetterToParent(): any {
             {el.question
               ? el.question.map((question: any) => {
                   return (
-                    <ContentQuestion key={question}>
-                      {question}
-                      <QuestionInput />
+                    <ContentQuestion key={question[1]}>
+                      {question[0]}
+                      <QuestionInput onChange={getValue(question[1])} />
                     </ContentQuestion>
                   );
                 })
@@ -138,8 +158,8 @@ function LetterToParent(): any {
               ? el.option.map((option: any) => {
                   return (
                     <ContentOption key={option[0]}>
-                      <Option1>{option[0]}</Option1>
-                      <Option2>{option[1]}</Option2>
+                      <Option1 onClick={() => getOption(option[0], option[2])}>{option[0]}</Option1>
+                      <Option2 onClick={() => getOption(option[1], option[2])}>{option[1]}</Option2>
                     </ContentOption>
                   );
                 })
@@ -191,7 +211,10 @@ const ContentChapter = styled.div`
   margin-top: 1rem;
 `;
 const ContentTitle = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background-color: white;
+  display: flex;
 `;
 const ContentQuestion = styled.div`
   margin-top: 1rem;
@@ -201,6 +224,10 @@ const ContentQuestion = styled.div`
 `;
 const QuestionInput = styled.input`
   height: 10rem;
+  border-radius: 1rem;
+  :focus {
+    outline: none;
+  }
 `;
 
 const ContentOption = styled.div`
