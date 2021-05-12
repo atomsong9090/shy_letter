@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from "react";
 import styled from "styled-components";
-import NavBar from "../components/nav";
 import contents from "../common/ask";
 import btnIcon from "../assets/btnIcon.svg";
 import lover from "../assets/lover.jpg";
@@ -33,7 +32,6 @@ export default function Write(): ReactElement {
 
   return (
     <Main>
-      <NavBar />
       <Container theme={letterState}>
         <ContainerDescription
           style={
@@ -132,6 +130,7 @@ function LetterToLover(props: any): any {
           </ContentChapter>
         );
       })}
+      <SubmitBtn>dd</SubmitBtn>
     </>
   );
 }
@@ -257,4 +256,9 @@ const BannerMention = styled.h1`
   color: white;
   font-size: 3rem;
   font-family: "Nanum Brush Script", cursive;
+`;
+
+const SubmitBtn = styled.button`
+  width: 5rem;
+  height: 3rem;
 `;

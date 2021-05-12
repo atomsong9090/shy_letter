@@ -40,7 +40,9 @@ export default function NavBar(): ReactElement {
           <MenuItem onClick={() => history.push("/write")}>{languageSet === "korean" ? "편지쓰기" : "Write"}</MenuItem>
         </MenuWrapper>
         <MenuWrapper>
-          <MenuItem>{languageSet === "korean" ? "편지읽기" : "Read"}</MenuItem>
+          <MenuItem onClick={() => history.push("/readmain")}>
+            {languageSet === "korean" ? "편지읽기" : "Read"}
+          </MenuItem>
         </MenuWrapper>
         <MenuWrapper>
           <MenuItem>{languageSet === "korean" ? "받은편지" : "Inbox"}</MenuItem>
